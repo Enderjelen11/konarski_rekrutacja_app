@@ -1,0 +1,96 @@
+/* Set the width and height of the side navigation bar */
+  .sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #f0f0f0;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Style the links inside the navigation bar */
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #818181;
+    display: block;
+  }
+
+  /* Change the color of links on hover */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  /* Add a "plus" icon before the "Add" button */
+  .add-btn::before {
+    content: "+";
+    font-size: 18px;
+    margin-right: 5px;
+  }
+
+  /* Center the "Add" button inside the sidenav */
+  .add-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  /* Add some padding to the "Add" button */
+  .add-btn {
+    padding: 10px 20px;
+  }
+
+  /* Align example elements to the top of the sidenav */
+  .example-elements {
+    margin-top: 20px;
+  }
+
+      /* Main content section */
+      .main-content {
+        margin-left: 200px; /* Set the margin to match the width of the sidenav */
+        padding: 20px;
+      }
+
+      /* Box containing the form */
+      .form-box {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+
+.input,
+.textarea {
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 1px 6px;
+  background-color: white;
+}
+
+.input-wrap {
+  position: relative;
+}
+.input-wrap .input {
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+.textarea {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  resize: both;
+  min-height: 40px;
+  line-height: 20px;
+}
+
+.textarea[contenteditable]:empty::before {
+  color: gray;
+}
