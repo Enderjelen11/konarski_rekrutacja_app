@@ -1,12 +1,9 @@
-import React from 'react'
+import React,{useState} from 'react'
 import ReactDOM from 'react-dom/client'
-import Sidenav from './Sidenav'
-import { FormsList } from './FormsList'
+import App from './App'
 
-const classes:{name:string}[] = []
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Sidenav classes={classes}/>
-    <FormsList/>
+    <App/>
   </React.StrictMode>,
 )
