@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Form = (props:{title:string,text:string,image:string}) => {
+const Form = (props:slide) => {
     return <div className="form-box">
         <p><strong>Nagłówek</strong> <span className="textarea" role="textbox" contentEditable>{props.title}</span></p>
         <p><strong>Tekst</strong> <span className="textarea" role="textbox" contentEditable>{props.text}</span></p>
@@ -8,7 +8,7 @@ const Form = (props:{title:string,text:string,image:string}) => {
     </div>
 }
 
-export const FormsList = (props : {slides:{title:string,text:string,image:string}[]}) => {
+export const FormsList = (props : {slides:slide[]}) => {
     return (
         <div className="main-content">
             {props.slides.map((slide,i)=>{
