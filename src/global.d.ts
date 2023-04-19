@@ -1,5 +1,6 @@
 interface slide {
  title:string,
  text:string,
- image:string
+ image:string,
+ cIndx:number
 }
