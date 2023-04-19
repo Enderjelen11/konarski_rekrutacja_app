@@ -7,7 +7,7 @@ export default function App(){
     const [cClassIndx,selectClass] = useState(0)
 
     return <>
-        <Sidenav classes={classes}/>
+        <Sidenav classes={classes} newClass={()=>{updateClasses([...classes,[{title:"Profil",text:"",image:""}]])}}/>
         <FormsList slides={classes[cClassIndx]} update={(slides:slide[])=>{updateClasses(classes.map((e,i)=>{console.log(classes);if(i==cClassIndx){return(slides)}else{return(e)}}))}}/>
     </>
 }
