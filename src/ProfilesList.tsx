@@ -48,7 +48,7 @@ function ElBox(props:{children:JSX.Element|string,color:string,onClick:()=>void}
 export default function ProfilesList(props:{profiles:{name:string,color:string}[], selectEl:()=>void, plusClicked:()=>void}) {
     return (
         <div>{[...props.profiles.map((profile,i)=>{
-            return  <ElBox key={`b${i}`} onClick={props.selectEl} color={profile.color}>{profile.name}</ElBox>
+            return  <ElBox key={`b${i}`} onClick={()=>{props.selectEl(i)}} color={profile.color}>{profile.name}</ElBox>
         }),
             <ElBox key="add" onClick={props.plusClicked} color="#aa42f5">+</ElBox>
         ]}</div>

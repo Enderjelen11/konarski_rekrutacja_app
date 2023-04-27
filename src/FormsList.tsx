@@ -1,4 +1,4 @@
-import React, { useRef} from 'react'
+import React, { useEffect } from 'react'
 
 const Form = (props:any) => {
     return <div className="form-box" style={{backgroundColor:"#f0f0f0"}}>
@@ -16,7 +16,8 @@ const TitleSlide = (props:any) => {
     </div>
 }
 
-export const FormsList = (props : {slides:slide[],classIndex:number, saveFunc:(addElement:slide[])=>void}) => {
+export const FormsList = (props : {slides:slide[],classIndex:number, saveFunc:(newEl:slide[],index:number)=>void}) => {
+    console.log(props.slides);
     return (
         <div className="main-content">
             {props.slides.map((slide,i)=>{
@@ -26,7 +27,7 @@ export const FormsList = (props : {slides:slide[],classIndex:number, saveFunc:(a
                     return   <Form key={i} i={i} cIndx={slide.cIndx} title={slide.title} text={slide.text} image={slide.image}/>
                 }
             })}
-          <div className="add-btn-container" onClick={()=>{props.saveFunc([{title:"",text:"",image:"",cIndx:props.classIndex}])}}>
+          <div className="add-btn-container" onClick={()=>{props.saveFunc([...props.slides,{title:"",text:"",image:"",cIndx:props.slides.length}],props.classIndex)}}>
             <button className="add-btn">Dodaj</button>
           </div>
         </div>

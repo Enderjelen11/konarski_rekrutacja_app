@@ -83,23 +83,30 @@ export default function App(){
       }
     }, [menuOpen]);
 
-    function saveFunc(addElement:slide[]){
-        const arr = classes[cClassIndx].map((s,i)=>new Object({
-            title:document.getElementById(`form${i}title${cClassIndx}`)?.innerText,
-            text:document.getElementById(`form${i}text${cClassIndx}`)?.innerText,
-            image:document.getElementById(`form${i}image${cClassIndx}`)?.innerText,
-            cIndx:cClassIndx
-        }))
-        //@ts-ignore
-        updateClasses(classes.map((e,i)=>{
-            if(i==cClassIndx){
-                return([...arr,...addElement])
-            }else{return(e)}
-        }));
+    function modifyAtIndex(newEl:slide[],index:number){
+        const newClasses = [...classes];
+        if(classes.length<=index){
+            newClasses.push(newEl);
+        }else{
+            newClasses[index]=newEl;
+        }
+        updateClasses([...newClasses]);
     }
 
+    function saveClass(){
+        //@ts-ignore
+        modifyAtIndex(classes[cClassIndx].map((s,i)=>{
+            return {
+                title:document.getElementById(`form${i}title${cClassIndx}`)?.innerText,
+                text:document.getElementById(`form${i}text${cClassIndx}`)?.innerText,
+                image:document.getElementById(`form${i}image${cClassIndx}`)?.innerText
+            }
+        }),cClassIndx);
+    }
+    
     return <>
-        <Sidenav classes={classes} newClass={()=>{updateClasses([...classes,[{title:"Profil",text:"",image:"",cIndx:classes.length}]])}} selectClass={selectClass} saveFunc={saveFunc}/>
-        <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} saveFunc={saveFunc}/>
+        <Sidenav classes={classes} newClass={()=>{modifyAtIndex([{title:"Profil",text:"",image:"",cIndx:classes.length}],classes.length)}} selectClass={selectClass} saveFunc={saveClass}/>
+        <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} saveFunc={modifyAtIndex}/>
+        <div>{classes[cClassIndx].length}</div>
     </>
 }
