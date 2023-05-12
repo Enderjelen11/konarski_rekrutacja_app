@@ -4,13 +4,14 @@ import { FormsList } from './FormsList'
 import { listen } from "@tauri-apps/api/event";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import { save, open } from "@tauri-apps/api/dialog";
+import { l } from '@tauri-apps/api/fs-4bb77382';
 
 export default function App(){
     const [menuPayload, setMenuPayload] = useState("");
     const [menuOpen, setMenuOpen] = useState(false);
     
     const [classes,updateClasses]=useState<slide[][]>([[{title:"Profil",text:"",image:"",cIndx:0}]])
-    const [cClassIndx,selectClass] = useState(0);
+    const [cClassIndx,setClassIndex] = useState(0);
 
     useEffect(() => {
       listen("menu-event", (e) => {
@@ -83,30 +84,49 @@ export default function App(){
       }
     }, [menuOpen]);
 
-    function modifyAtIndex(newEl:slide[],index:number){
-        const newClasses = [...classes];
-        if(classes.length<=index){
-            newClasses.push(newEl);
-        }else{
-            newClasses[index]=newEl;
-        }
-        updateClasses([...newClasses]);
+    async function readSlides():Promise<slide[]>{
+        console.log()
+        return classes[cClassIndx].map((s,i)=>{
+            return {
+                title:document.getElementById(`form${i}title`)?.innerText||"",
+                text:document.getElementById(`form${i}text`)?.innerText||"",
+                image:document.getElementById(`form${i}image`)?.innerText||"",
+                cIndx:i
+            }
+        });
     }
 
-    function saveClass(){
-        //@ts-ignore
-        modifyAtIndex(classes[cClassIndx].map((s,i)=>{
-            return {
-                title:document.getElementById(`form${i}title${cClassIndx}`)?.innerText,
-                text:document.getElementById(`form${i}text${cClassIndx}`)?.innerText,
-                image:document.getElementById(`form${i}image${cClassIndx}`)?.innerText
-            }
-        }),cClassIndx);
+    async function addSlide(newEl:slide){
+        const slides = await readSlides();
+        const classesCopy = [...classes];
+        classesCopy[cClassIndx]=[...slides,newEl];
+        updateClasses(classesCopy);
+    }
+
+    async function addClass(){
+        const slides = await readSlides();
+        const classesCopy = [...classes];
+        classesCopy[cClassIndx]=slides;
+        console.log(slides);
+        if(slides[0].title!=""){
+            updateClasses([...classesCopy,[{title:"Profil",text:"",image:"",cIndx:classesCopy.length}]]);
+        }
+    }
+
+    async function selectClass(index:number){
+        let slides = await readSlides();
+        const classesCopy = [...classes];
+        classesCopy[cClassIndx]=slides;
+        if(slides[0].title!=""){
+            await updateClasses(classesCopy);        
+        }
+        setClassIndex(index);
     }
     
     return <>
-        <Sidenav classes={classes} newClass={()=>{modifyAtIndex([{title:"Profil",text:"",image:"",cIndx:classes.length}],classes.length)}} selectClass={selectClass} saveFunc={saveClass}/>
-        <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} saveFunc={modifyAtIndex}/>
+        <Sidenav classes={classes} selectClass={selectClass} newClass={addClass}/>
+        <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} addFunc={addSlide} />
         <div>{classes[cClassIndx].length}</div>
+        console.log()
     </>
 }
