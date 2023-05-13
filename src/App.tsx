@@ -1,12 +1,11 @@
-import React,{useState,useRef,useEffect} from 'react'
+import React,{useState,useEffect} from 'react'
 import Sidenav from './Sidenav'
 import { FormsList } from './FormsList'
 import { listen } from "@tauri-apps/api/event";
-import { readTextFile, writeFile } from "@tauri-apps/api/fs";
+import { readTextFile } from "@tauri-apps/api/fs";
 import { save, open } from "@tauri-apps/api/dialog";
 import fileTemplate from "./template.json"
 import { invoke } from '@tauri-apps/api';
-import { i } from '@tauri-apps/api/event-2a9960e7';
 
 export default function App(){
     const [menuPayload, setMenuPayload] = useState("");
@@ -133,7 +132,7 @@ export default function App(){
         const classesCopy = [...classes];
         classesCopy[cClassIndx]=slides;
         if(slides[0].title!=""){
-            await updateClasses(classesCopy);        
+            updateClasses(classesCopy);        
         }
         setClassIndex(index);
     }
