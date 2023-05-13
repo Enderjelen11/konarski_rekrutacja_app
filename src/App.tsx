@@ -4,7 +4,9 @@ import { FormsList } from './FormsList'
 import { listen } from "@tauri-apps/api/event";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import { save, open } from "@tauri-apps/api/dialog";
-import { l } from '@tauri-apps/api/fs-4bb77382';
+import fileTemplate from "./template.json"
+import { invoke } from '@tauri-apps/api';
+import { i } from '@tauri-apps/api/event-2a9960e7';
 
 export default function App(){
     const [menuPayload, setMenuPayload] = useState("");
@@ -57,11 +59,24 @@ export default function App(){
       }
     };
 
-    const SaveFile = async (text:string) => {
+    const SaveFile = async () => {
+        const slides = await readSlides();
+        const classesCopy = [...classes];
+        classesCopy[cClassIndx]=slides;
+        updateClasses(classesCopy);
+        const data:(number|null)[] = [...JSON.stringify(classesCopy.map(el=>el.map(e=>new Object({title:e.title,text:e.text,image:e.image}))))].map((e,i,arr)=>{
+            if(e=='"'&&arr[i+1]==':'){
+                return null;
+            }else if(e=='"'&&(arr[i-1]==','||arr[i-1]=='{')){
+                return null;
+            }else{
+                return e.charCodeAt(0);
+            }
+        }).filter(e=>e!=null);
+        const contents = ([[...fileTemplate[0],...data,...fileTemplate[1]]]);
       try {
-        let filepath = await save();
-        //@ts-ignore
-        await writeFile({ contents: text, path: filepath, });
+        let filepath = await save({filters:[{name: 'website',extensions: ['php']}]});
+        await invoke("save_file", {path:filepath,contents})
       } catch (e) {
         console.log(e);
       }
@@ -74,7 +89,7 @@ export default function App(){
             OpenFile();
             break;
           case "save-event":
-            SaveFile("sex");
+            SaveFile();
             break;
 
           default:
