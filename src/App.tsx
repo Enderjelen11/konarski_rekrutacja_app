@@ -136,10 +136,16 @@ export default function App(){
         }
         setClassIndex(index);
     }
+
+    async function deleteSlide(index:number){
+        const classesCopy = [...classes];
+        classesCopy[cClassIndx] = classesCopy[cClassIndx].filter((e,i)=>i!=index);
+        updateClasses(classesCopy);
+    }
     
     return <>
         <Sidenav classes={classes} selectClass={selectClass} newClass={addClass}/>
-        <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} addFunc={addSlide} />
+        <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} addFunc={addSlide} delete={deleteSlide}/>
         <div>{classes[cClassIndx].length}</div>
         console.log()
     </>
