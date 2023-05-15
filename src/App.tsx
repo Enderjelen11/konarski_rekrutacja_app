@@ -143,8 +143,17 @@ export default function App(){
         updateClasses(classesCopy);
     }
     
+    async function deleteProfile(index:number){
+        let classesCopy = [...classes];
+        classesCopy = classesCopy.filter((e,i)=>i!=index);
+        if(classesCopy.length!=0){
+            updateClasses(classesCopy);
+        }
+    }
+
+
     return <>
-        <Sidenav classes={classes} selectClass={selectClass} newClass={addClass}/>
+        <Sidenav classes={classes} selectClass={selectClass} newClass={addClass} delete={deleteProfile}/>
         <FormsList slides={classes[cClassIndx]} classIndex={cClassIndx} addFunc={addSlide} delete={deleteSlide}/>
         <div>{classes[cClassIndx].length}</div>
         console.log()
